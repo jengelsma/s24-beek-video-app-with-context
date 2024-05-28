@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import VideoListScreen from './screens/VideoListScreen';
 import YTViewerScreen from './screens/YTViewerScreen';
 
 export default function App() {
-  const Stack = createStackNavigator();
+  const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
       <Stack.Navigator>
