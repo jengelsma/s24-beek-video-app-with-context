@@ -1,54 +1,37 @@
-import React from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
   FlatList,
+  StyleSheet,
+  Text,
   TouchableOpacity,
+  View,
 } from 'react-native';
-import { BaseRouter } from '@react-navigation/native';
-import { useEffect, useState } from 'react';
+import { Image, Input, ListItem } from '@rneui/themed';
+import React, { useEffect, useState } from 'react';
+
+import VideoList from '../components/VideoList';
 import { getVideos } from '../api/YTServer';
-import { Image, ListItem } from '@rneui/themed';
 
 const VideoListScreen = ({ navigation }) => {
   const [videos, setVideos] = useState([]);
+  const [searchStr, setSearchStr] = useState('');
 
   useEffect(() => {
-    getVideos((data) => {
-      setVideos(data.items);
-    });
-  }, []);
-
-  const renderVideo = ({ index, item }) => {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('Video Viewer', item);
-        }}
-      >
-        <ListItem key={index}>
-          <Image
-            source={{ uri: item.snippet.thumbnails.default.url }}
-            style={{ width: 100, height: 55 }}
-          />
-          <ListItem.Content>
-            <ListItem.Title> {item.snippet.title} </ListItem.Title>
-          </ListItem.Content>
-          <ListItem.Chevron />
-        </ListItem>
-      </TouchableOpacity>
-    );
-  };
+    if (searchStr.length > 2) {
+      getVideos(searchStr, (data) => {
+        setVideos(data.items);
+      });
+    } else {
+      setVideos([]);
+    }
+  }, [searchStr]);
 
   return (
-    <View style={styles.screen}>
-      <FlatList
-        data={videos}
-        keyExtractor={(item) => item.id.videoId}
-        extraData={videos}
-        renderItem={renderVideo}
+    <View>
+      <Input
+        placeholder='Enter search terms'
+        onChangeText={(value) => setSearchStr(value)}
       />
+      <VideoList videos={videos} />
     </View>
   );
 };

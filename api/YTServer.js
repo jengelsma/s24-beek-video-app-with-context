@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { YT_KEY } from './YTKey';
+import axios from 'axios';
 
 const YTServer = axios.create({
   baseURL: 'https://www.googleapis.com/youtube/v3/search',
@@ -12,7 +12,7 @@ YTServer.interceptors.request.use(
     config.headers.Accept = 'application/json';
     // const token = await AsyncStorage.getItem('token');
     // if (token) {
-    //   config.headers.Authorization = \`Bearer \${token}\`;
+    //   config.headers.Authorization = `Bearer ${token}`;
     // }
     return config;
   },
@@ -22,10 +22,9 @@ YTServer.interceptors.request.use(
   }
 );
 
-export const getVideos = async (callback) => {
-  console.log('key=', YT_KEY);
+export const getVideos = async (query, callback) => {
   const response = await YTServer.get(
-    `?key=${YT_KEY}&part=snippet&q=beekeeping&maxResults=25`
+    `?key=${YT_KEY}&part=snippet&q=${query}&maxResults=15&type=video`
   );
   callback(response.data);
 };
